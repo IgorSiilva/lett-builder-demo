@@ -1,0 +1,10 @@
+{
+    "beanstalk": {
+        "instance_type": "t3.small"
+    },
+    "tags": {
+        "team": "web",
+        "squad": "squad_scale",
+        "project": "lett_builder_demo"
+    }
+}

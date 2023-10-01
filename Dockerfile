@@ -1,0 +1,33 @@
+#DONT USE THE LATEST VERSION SPECIFY THE VERSION YOU WANT TO USE
+FROM node:latest
+
+WORKDIR /usr/src/app
+
+
+# Lett-log dependeicies
+ARG SSH_KEY
+
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh && \
+    ssh-keyscan github.com > /root/.ssh/known_hosts && \
+    echo "$SSH_KEY" > /root/.ssh/id_rsa && \
+    chmod 700 /root/.ssh/id_rsa
+
+RUN eval "$(ssh-agent -s)" && ssh-add /root/.ssh/id_rsa && ssh -o StrictHostKeyChecking=no git@github.com || true 
+
+COPY package*.json ./
+
+COPY . .
+
+RUN npm ci
+
+RUN rm -R /root/.ssh
+
+COPY src ./
+
+COPY --chown=node:node . .
+
+EXPOSE 3000
+EXPOSE 9229
+
+CMD ["npm", "run", "debug"]

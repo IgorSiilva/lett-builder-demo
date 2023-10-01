@@ -1,0 +1,32 @@
+{
+  "name": "foo-bar",
+  "version": "1.0.0",
+  "description": "node-template-repo",
+  "main": "app.js",
+  "scripts": {
+    "jobs:lint": "eslint ./",
+    "lint:fix": "eslint --fix ./",
+    "prettier:fix": "prettier --write \"**/*.js\"",
+    "start": "nodemon --legacy-watch . -e js,json --inspect src/app.js",
+    "debug": "nodemon --trace-warnings --legacy-watch --inspect=0.0.0.0:9229 src/app.js",
+    "start:prod": "node src/app.js",
+    "start:docker": "docker-compose -f docker-compose.yml up",
+    "stop:docker": "docker-compose -f docker-compose.yml down",
+    "rebuild:docker": "docker-compose -f docker-compose.yml build --build-arg SSH_KEY=\"$(cat ~/.ssh/id_rsa)\" --no-cache",
+    "test": "jest",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run prettier:fix"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "nodemon": "^2.0.20"
+  }
+}

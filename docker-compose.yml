@@ -1,0 +1,10 @@
+version: "3"
+services:
+  template-repo-nodejs:
+    build: .
+    container_name: template_repo_nodejs
+    ports:
+      - 3000:3000
+      - 9229:9229
+    volumes:
+      - .:/usr/src/app

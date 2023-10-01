@@ -1,0 +1,13 @@
+{
+    "prettier.trailingComma": "es5",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.rulers": [{ "column": 160, "color": "#3F51B5" }],
+    "window.title": "[${rootName}]${separator}${activeEditorMedium} ${dirty}",
+    "workbench.colorCustomizations": {
+        "titleBar.activeForeground": "#FDFBFA",
+        "titleBar.activeBackground": "#3F51B5",
+        "activityBar.foreground": "#ffffff",
+        "activityBar.background": "#283593",
+    },
+}

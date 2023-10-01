@@ -1,0 +1,59 @@
+version: "3"
+services:
+  template-repo:
+    image: '868884350453.dkr.ecr.us-east-1.amazonaws.com/team-web/template_repo:${PUT_YOUR_TAG_HERE}'
+    container_name: template_repo_prod
+    restart: always
+    ports:
+      - 80:3000
+    volumes:
+      - "/tmp:/tmp"
+      - "${EB_LOG_BASE_DIR}:/usr/src/app/logs"
+    command: npm run start:prod
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+  node_exporter:
+    image: 868884350453.dkr.ecr.us-east-1.amazonaws.com/team-devops/node-exporter:latest
+    privileged: true
+    container_name: node_exporter
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 96M
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.systemd'
+      - '--collector.processes'
+    network_mode: host
+    pid: host
+
+  cadvisor:
+    image: 868884350453.dkr.ecr.us-east-1.amazonaws.com/team-devops/cadvisor:latest
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 48M
+    container_name: cadvisor
+    restart: always
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    ports:
+      - '8080:8080'

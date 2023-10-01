@@ -1,0 +1,66 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀🔨
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+
+
+
+      #Lett Builder configuration file
+      #See https://github.com/IgorSiilva/lett-builder/lett-builder.json for available options.
+      - name: Reading Infrastructure Requirements 📜🔨
+        id: infrastructure_requirement
+        run: |
+          json_content=$(cat lett-builder.json)
+          echo "::set-output name=data::$json_content"
+
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: IgorSiilva/lett-builder
+          event-type: new_repository_created
+          client-payload: '{"repository_name": "${{ github.event.repository.name }}","creator_username": "${{ github.actor }}","infrastructure_requirements": "${{ steps.infrastructure_requirement.outputs.data }}"}'
+
+
+#      - name: Make Changes to README
+#        run: |
+#          # Adicione comandos aqui para fazer as alterações necessárias no arquivo README.md
+#          echo "Hello, World!" >> terraform-directory/README.md
+
+#      - name: Commit Changes
+#        run: |
+#          cd terraform-directory/
+#          git config --local user.email "action@github.com"
+#          git config --local user.name "GitHub Action"
+#          git add .
+#          git commit -m "Update README"
+
+#      - name: Create Remote Branch
+#        run: |
+#          cd terraform-directory/
+#          git checkout -b testing-lett-builder
+#          git push origin testing-lett-builder
+
+#      - name: Create Pull Request
+#        run: cd terraform-directory/ && gh pr create --title "Update README" --body "![image](https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fc50ed378-b3c4-431e-8677-37d0895f23f2%2F0b539aba-a284-4386-b99d-6679140e7b38%2FCaptura_de_tela_2023-09-30_114343.png?table=block&id=1668957b-beb7-449a-b7c3-5c62b72c3e82&spaceId=c50ed378-b3c4-431e-8677-37d0895f23f2&width=2000&userId=8e4dce2e-6850-4eb8-b3d0-cf0915536fd1&cache=v2)" --base main --head testing-lett-builder
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}    
+

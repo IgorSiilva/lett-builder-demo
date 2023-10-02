@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: IgorSiilva/lett-builder
           event-type: new_repository_created
-          client-payload: '{"repository_name": "${{ github.event.repository.name }}","creator_username": "${{ github.actor }}","infrastructure_requirements": ${{ steps.infrastructure_requirement.outputs.data }} }'
+          client-payload: '{"repository_name": "${{ github.event.repository.name }}","creator_username": "${{ github.actor }}","infrastructure_requirements": '${{ steps.infrastructure_requirement.outputs.data }}' }'
 
 
 #      - name: Make Changes to README

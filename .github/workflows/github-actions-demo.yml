@@ -30,7 +30,7 @@ jobs:
         id: infrastructure_requirement
         run: |
           json_content=$(cat lett-builder.json | jq -c .)
-          echo "::set-output name=data::$json_content"
+          echo "INFRA_REQUIREMENTS"=$json_content >> "$GITHUB_ENV"
 
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2
@@ -38,12 +38,7 @@ jobs:
           token: ${{ secrets.PAT }}
           repository: IgorSiilva/lett-builder
           event-type: new_repository_created
-          client-payload: |
-            {
-              "repository_name": "${{ github.event.repository.name }}",
-              "creator_username": "${{ github.actor }}",
-              "infrastructure_requirements": ${{ steps.infrastructure_requirement.outputs.data | fromJSON | tojson }}
-            }
+          client-payload: '{"repository_name": "${{ github.event.repository.name }}","creator_username": "${{ github.actor }}","infrastructure_requirements": "$INFRA_REQUIREMENTS" }'
 
 
 #      - name: Make Changes to README

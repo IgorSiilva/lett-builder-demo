@@ -29,7 +29,7 @@ jobs:
       - name: Reading Infrastructure Requirements 📜🔨
         id: infrastructure_requirement
         run: |
-          json_content=$(cat lett-builder.json)
+          json_content=$(cat lett-builder.json | jq -c .)
           echo "::set-output name=data::$json_content"
 
       - name: Repository Dispatch
